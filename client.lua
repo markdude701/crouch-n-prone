@@ -13,7 +13,7 @@ Citizen.CreateThread( function()
 		if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then 
 			ProneMovement()
 			DisableControlAction( 0, proneKey, true ) 
-			DisableControlAction( 0, crouchKey, true ) 
+			DisableControlAction( 0, crouchKey, true )
 			if ( not IsPauseMenuActive() ) then 
 				if ( IsDisabledControlJustPressed( 0, crouchKey ) and not proned ) then 
 					RequestAnimSet( "move_ped_crouched" )
@@ -57,19 +57,21 @@ Citizen.CreateThread( function()
 		else
 			proned = false
 			crouched = false
+			EnableControlAction( 0, 23 , false ) -- ENABLE ENTERING VEHICLE WHEN NOT CROUCHED OR PRONE 
 		end
 	end
 end)
 
 function SetProned()
 	ped = PlayerPedId()
-	ClearPedTasksImmediately(ped)
+	--ClearPedTasksImmediately(ped) --Called on line 48
 	TaskPlayAnimAdvanced(ped, "move_crawl", "onfront_fwd", GetEntityCoords(ped), 0.0, 0.0, GetEntityHeading(ped), 1.0, 1.0, 1.0, 46, 1.0, 0, 0)
 end
 
 
 function ProneMovement()
 	if proned then
+		DisableControlAction( 0, 23 , true ) -- DISABLE ENTERING VEHICLE WHEN CROUCHED OR PRONE 
 		ped = PlayerPedId()
 		if IsControlPressed(0, 32) or IsControlPressed(0, 33) then
 			DisablePlayerFiring(ped, true)
